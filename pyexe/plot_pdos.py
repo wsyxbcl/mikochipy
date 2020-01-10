@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 # Extract and Plot density of states (DOS) from VASP output file (vasprun.xml)
 # Reference
