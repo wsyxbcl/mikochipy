@@ -122,13 +122,13 @@ def main(path, dos_element_plot, dos_orbital_plot, dos_total_plot, xmin, xmax, o
     handles, labels = plt.gca().get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     plt.legend(by_label.values(), by_label.keys(), loc='upper right')
-    plt.show()
     
     if outfile is not None:
         plt.savefig(outfile)
     else:
         print("Autosaving to "+str(path.parent.joinpath('dos.png')))
-        plt.savefig(path.parent.joinpath('dos.png'))
+        plt.savefig(path.parent.joinpath('dos.png'), dpi=300)
+    plt.show()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="plot DOS from vasprun.xml")
