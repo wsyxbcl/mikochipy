@@ -64,7 +64,7 @@ def plot_dos(dos, energy, label, color, lw=1, color_fill=None):
         if color_fill is not None:
             plt.fill_between(energy, 0, d, edgecolor=color, facecolor=color_fill)
 
-def main(path, dos_element_plot, dos_orbital_plot, dos_total_plot, xmin, xmax, outfile):
+def main(path, dos_element_plot, dos_orbital_plot, dos_total_plot, xmin, xmax, ymin, ymax, outfile):
     plt.close()
     # Colormaps
     # colors = plt.get_cmap("tab10").colors
@@ -117,6 +117,10 @@ def main(path, dos_element_plot, dos_orbital_plot, dos_total_plot, xmin, xmax, o
         plt.xlim(right=xmax)
     if xmin is not None:
         plt.xlim(left=xmin)
+    if ymax is not None:
+        plt.ylim(top=ymax)
+    if ymin is not None:
+        plt.ylim(bottom=ymin)
     plt.ylabel('DOS')
     plt.xlabel('$E-E_F$ / eV')
     handles, labels = plt.gca().get_legend_handles_labels()
@@ -145,7 +149,9 @@ if __name__ == '__main__':
                         help='total DOS')
     parser.add_argument('--xmin', dest='xmin', type=float, help="lower boundary of x")
     parser.add_argument('--xmax', dest='xmax', type=float, help="higher boundary of x")
+    parser.add_argument('--ymin', dest='ymin', type=float, help="lower boundary of y")
+    parser.add_argument('--ymax', dest='ymax', type=float, help="higher boundary of y")
     parser.add_argument('--output', dest='outfile', type=Path, help='output file')                      
     args = parser.parse_args()
     main(args.data_path, args.dos_element_plot, args.dos_orbital_plot, 
-         args.dos_total_plot, args.xmin, args.xmax, args.outfile)
+         args.dos_total_plot, args.xmin, args.xmax, args.ymin, args.ymax, args.outfile)
