@@ -42,7 +42,10 @@ if __name__ == '__main__':
     # Manual login first
     driver = selenium.webdriver.Chrome()
     driver.get("https://www.bilibili.com")
-
+    while input("Waiting for login, 'CHECK' to continue: ") != 'CHECK':
+        pass
+    print("GOTCHA")
+    
     cookies = driver.get_cookies()
     s = requests.Session()
     for cookie in cookies:
