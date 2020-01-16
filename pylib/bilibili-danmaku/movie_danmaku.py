@@ -5,6 +5,8 @@ import time
 import xml.etree.ElementTree as ET 
 
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KernelDensity
 import selenium.webdriver
 
 # def Danmaku():
@@ -27,9 +29,10 @@ def get_movie_danmaku(session, oid, date, header, save=True):
     return danmaku
 
 if __name__ == '__main__':
+    density_analysis = False
     # Date
-    start_date = date(2019, 12, 25)
-    end_date = date(2020, 1, 10)
+    start_date = date(2019, 8, 10)
+    end_date = date(2020, 1, 16)
     dates = []
     delta = timedelta(days=1)
     while start_date <= end_date:
@@ -54,3 +57,31 @@ if __name__ == '__main__':
     for date in dates:
         danmaku_list += get_movie_danmaku(s, oid, date, header)
         time.sleep(10)
+
+    # Data processing
+    # extract features
+    danmaku_array = np.array(danmaku_list)
+    time_list = np.array([i.split(',')[0] for i in danmaku_array[:, 0]])
+    id_list = np.array([i.split(',')[7] for i in danmaku_array[:, 0]])
+    danmaku_array[:, 0] = time_list
+    danmaku_array = np.c_[id_list, danmaku_array]
+    # removing duplicated
+    u, idx = np.unique(danmaku_array[:, 2], return_index=True)
+    danmaku_unique = danmaku_array[idx]
+    # sorting
+    danmaku_unique = danmaku_unique[danmaku_unique[:, 1].astype('float').argsort()]
+    # Saving
+    np.savetxt('./data/'+oid+'.csv', danmaku_unique, fmt='%s', encoding='utf-8')
+    # Plotting & Frequency analysis
+    if density_analysis:
+        x = danmaku_unique[:, 1].astype('float')[:, np.newaxis] # time array, unit: s
+        x_plot = np.linspace(0, np.max(x), 3000)[:, np.newaxis]
+        colors = ['cornflowerblue', 'darkorange']
+        kernels = ['gaussian', 'epanechnikov']
+        fig, ax = plt.subplots()
+        for color, kernel in zip(colors, kernels):
+            kde = KernelDensity(kernel=kernel, bandwidth=0.5).fit(x)
+            log_dens = kde.score_samples(x_plot)
+            ax.plot(x_plot[:, 0], np.exp(log_dens), color=color, lw=2,
+                    linestyle='-', label="kernel = '{0}'".format(kernel))
+        plt.show()
