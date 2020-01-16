@@ -30,6 +30,7 @@ def get_movie_danmaku(session, oid, date, header, save=True):
 
 if __name__ == '__main__':
     density_analysis = False
+    keywords_list = []
     # Date
     start_date = date(2019, 8, 10)
     end_date = date(2020, 1, 16)
@@ -72,7 +73,9 @@ if __name__ == '__main__':
     danmaku_unique = danmaku_unique[danmaku_unique[:, 1].astype('float').argsort()]
     # Saving
     np.savetxt('./data/'+oid+'.csv', danmaku_unique, fmt='%s', encoding='utf-8')
+
     # Plotting & Frequency analysis
+    # density analysis
     if density_analysis:
         x = danmaku_unique[:, 1].astype('float')[:, np.newaxis] # time array, unit: s
         x_plot = np.linspace(0, np.max(x), 3000)[:, np.newaxis]
@@ -85,3 +88,21 @@ if __name__ == '__main__':
             ax.plot(x_plot[:, 0], np.exp(log_dens), color=color, lw=2,
                     linestyle='-', label="kernel = '{0}'".format(kernel))
         plt.show()
+    # keyword analysis
+    # filter keywords
+    keyword_idx = set()
+    for keyword in keywords_list:
+        keyword_idx = set(np.flatnonzero(np.char.find(danmaku_unique[:,2], keyword) != -1)) | keyword_idx
+    danmaku_keyword = danmaku_unique[list(keyword_idx)]
+    
+    fig, ax = plt.subplots()
+    x = danmaku_keyword[:, 1].astype('float')[:, np.newaxis] # time array, unit: s
+    x_plot = np.linspace(0, np.max(x), 1000)[:, np.newaxis]
+    colors = ['cornflowerblue', 'darkorange']
+    kernels = ['gaussian', 'epanechnikov']
+    fig, ax = plt.subplots()
+    for color, kernel in zip(colors, kernels):
+        kde = KernelDensity(kernel=kernel, bandwidth=0.5).fit(x)
+        log_dens = kde.score_samples(x_plot)
+        ax.plot(x_plot[:, 0], np.exp(log_dens), color=color, lw=2,
+                linestyle='-', label="kernel = '{0}'".format(kernel))
