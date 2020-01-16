@@ -14,7 +14,7 @@ def get_movie_danmaku(session, oid, date, header, save=True):
     GET .xml file by oid and date through bilibili API
     """
     danmaku = []
-    url = "https://api.bilibili.com/x/v2/dm/history?type=1&oid={}date={}".format(oid, date)
+    url = "https://api.bilibili.com/x/v2/dm/history?type=1&oid={}&date={}".format(oid, date)
     print("GET "+url)
     response = session.get(url, headers=header)
     response.encoding = 'utf-8'
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         dates.append(start_date.strftime("%Y-%m-%d"))
         start_date += delta
     danmaku_list = []
-    oid = '112148195&'
+    oid = '112148195'
     header = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0'} 
     
     # Manual login first
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     while input("Waiting for login, 'CHECK' to continue: ") != 'CHECK':
         pass
     print("GOTCHA")
-    
+
     cookies = driver.get_cookies()
     s = requests.Session()
     for cookie in cookies:
