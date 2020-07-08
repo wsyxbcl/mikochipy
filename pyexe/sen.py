@@ -97,5 +97,5 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
             time.sleep(time_sleep)
 
 if __name__ == '__main__':
-    dataset_dir = ''
+    dataset_dir = Path('')
     auto_vasp_ce(dataset_dir=dataset_dir, max_job=6, time_sleep=1000)
