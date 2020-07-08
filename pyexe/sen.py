@@ -15,18 +15,19 @@ class Bjob():
     def __init__(self, task_dir, type):
         self.task_dir = task_dir
         self.type = type
-        self.status = None
+        self.stat = None
         self.jobid = None
 
     def get_stat(self):
         if self.jobid is None:
-            self.status = 'TODO'
+            self.stat = 'TODO'
         else:
             status = subprocess.check_output(['bjobs', self.jobid])
             # TODO
             # Just a temporary implement
             stat = status.decode('utf-8').split()[10]
             self.stat = stat
+        return self.stat
 
     def submit(self):
         os.chdir(self.task_dir)
