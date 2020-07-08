@@ -6,6 +6,7 @@
 # Currently focus on Platform Load Sharing Facility (LSF)
 # designed for batch job submission for construct CE dataset
 
+import os
 import re
 from pathlib import Path
 import subprocess 
@@ -28,6 +29,7 @@ class Bjob():
             self.stat = stat
 
     def submit(self):
+        os.chdir(self.task_dir)
         if self.type == 'vasp':
             vasp_file = self.task_dir.joinpath('vasp.lsf')
             job = subprocess.check_output('bsub < '+str(vasp_file), shell=True)
