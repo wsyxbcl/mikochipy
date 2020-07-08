@@ -32,11 +32,14 @@ def select_structures(database, num_structures, weighted_atom=_no_value):
         except KeyError:
             c_atoms.append(0)
     if weighted_atom is _no_value:
-        selected_structures = random.choices(structures, k=num_structures)
+        selected_structures = np.random.choice(structures, 
+                                               size=num_structures,
+                                               replace=False)
     else:
-        selected_structures = random.choices(structures,
-                                             weights=c_atoms,
-                                             k=num_structures)
+        selected_structures = np.random.choice(structures,
+                                               size=num_structures,
+                                               replace=False,
+                                               p=[c / sum(c_atoms) for c in c_atoms])
     return selected_structures
                                                                              
 def structures_to_vasp(structures, path_dataset, remove_x=True):
