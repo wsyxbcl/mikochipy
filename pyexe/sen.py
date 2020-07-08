@@ -38,7 +38,7 @@ class Bjob():
             #                          stdout=subprocess.PIPE, 
             #                          stderr=subprocess.PIPE, 
             #                          stdin=open(vasp_file, 'r'))
-            job = pipe.communicate()[0]
+            # job = pipe.communicate()[0]
             self.jobid = re.findall('\<(.*?)\>', job.decode('utf-8'))[0]
 
 
