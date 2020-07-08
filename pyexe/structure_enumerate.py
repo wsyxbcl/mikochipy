@@ -53,12 +53,12 @@ def structures_to_vasp(structures, path_dataset, remove_x=True):
             path_row.mkdir(parents=True)
             atoms = row.toatoms()
             del atoms[[atom.index for atom in atoms if atom.symbol == 'X']]
-            ase.io.write('POSCAR', atoms, format='vasp')
+            ase.io.write(path_row.joinpath('POSCAR'), atoms, format='vasp')
     else:
         for row in structures:
             path_row = path_dataset.joinpath('dataset/'+str(row.id))
             path_row.mkdir(parent=True)
-            ase.io.write('POSCAR', row.toatoms(), format='vasp')
+            ase.io.write(path_row.joinpath('POSCAR'), row.toatoms(), format='vasp')
         
 
 def vasp_to_database(database, path_dataset, property):
