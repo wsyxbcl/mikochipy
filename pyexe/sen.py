@@ -66,8 +66,8 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
     logging.debug('Job begins')
     print("Dataset: "+str(dataset_dir))
     logging.info("Dataset: "+str(dataset_dir))
-    task_dirs = [rootdir.joinpath(rootdir, name) for name in os.listdir(rootdir)
-                 if os.path.isdir(os.path.join(rootdir, name))]
+    task_dirs = [dataset_dir.joinpath(name) for name in os.listdir(dataset_dir)
+                 if os.path.isdir(os.path.join(dataset_dir, name))]
     print("Total task: {}".format(len(task_dirs)))
     logging.info("Total task: {}".format(len(task_dirs)))
     # Remove fininshed tasks 
