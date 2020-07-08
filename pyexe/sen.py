@@ -94,7 +94,12 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
             logging.info("Job submmited as {}, status: {}".format(job.jobid, job.get_stat()))
             task_dirs.remove(task_dir)
             print("Task removed.")
-            continue
+            if not task_dirs:
+                print("Tasks finished.")
+                logging.info("Tasks finished")
+                return 0
+            else:
+                continue
         else:
             print("zzzzzzz")
             logging.debug("sleep")
