@@ -4,15 +4,17 @@
 # Named after Sen.
 
 # Currently focus on Platform Load Sharing Facility (LSF)
-# designed for batch job submission for construct CE dataset
+# designed specificly for batch job submission for constructed CE dataset
+# Will be reconstructed #TODO
 
 import os
-import re
 from pathlib import Path
-import subprocess 
+import re
+import subprocess
+import time
 
 class Bjob():
-    def __init__(self, task_dir, type):
+    def __init__(self, task_dir, type='vasp'):
         self.task_dir = task_dir
         self.type = type
         self.stat = None
@@ -41,5 +43,45 @@ class Bjob():
             # job = pipe.communicate()[0]
             self.jobid = re.findall('\<(.*?)\>', job.decode('utf-8'))[0]
 
+def get_bjobs_status():
+    # Just a temporary implement
+    # TODO form a dictionary or something
 
+    # remove headline and empty string
+    status = subprocess.check_output('bjobs').decode('utf-8').split('\n')[1:-1]
+    # JOBID, USER, STAT, QUEUE, FROM_HOST, EXEC_HOST, JOB_NAME, SUBMIT_TIME
+    bjobs_status = [bjob_stat.split() for bjob_stat in status]
+    return bjobs_status
 
+def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
+    # Specificly for batch job submission for constructed CE dataset
+    print("Job begins")
+    print("Dataset: "+str(dataset_dir))
+    task_dirs = [rootdir.joinpath(rootdir, name) for name in os.listdir(rootdir)
+                 if os.path.isdir(os.path.join(rootdir, name))]
+    print("Total task: {}".format(len(task_dirs)))
+    # Remove fininshed tasks 
+    for task_dir in task_dirs:
+        if os.path.exists(task_dir.joinpath('OUTCAR')):
+            task_dirs.remove(task_dir)
+    print("Task left: {}".format(len(task_dirs)))
+    print("\nGood luck by Sen")
+    
+    while True:
+        num_job = len(get_bjobs_status())
+        if num_job < max_job:
+            task_dir = random.choice(task_dirs)
+            job = Bjob(task_dir=task_dir, type='vasp')
+            print("Job created from: {}".format(str(task_dir)))
+            job.submit()
+            print("Job submmited as {}, status: {}".format(job.jobid, job.get_stat()))
+            task_dirs.remove(task_dir)
+            print("Task removed.")
+            continue
+        else:
+            print("zzzzzzz")
+            time.sleep(time_sleep)
+
+if __name__ == '__main__':
+    dataset_dir = ''
+    auto_vasp_ce(dataset_dir=dataset_dir, max_job=6, time_sleep=1000)
