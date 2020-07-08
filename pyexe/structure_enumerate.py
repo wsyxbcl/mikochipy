@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 
 import ase.io
@@ -27,15 +28,15 @@ def select_structures(database, num_structures, weighted_atom=_no_value):
     c_atoms = []
     for row in structures:
         try:
-            c_atoms.append(row.count_atoms()[atom] / row.natoms)
+            c_atoms.append(row.count_atoms()[weighted_atom] / row.natoms)
         except KeyError:
             c_atoms.append(0)
     if weighted_atom is _no_value:
         selected_structures = random.choices(structures, k=num_structures)
     else:
         selected_structures = random.choices(structures,
-                                            weights=c_atoms,
-                                            k=num_structures)
+                                             weights=c_atoms,
+                                             k=num_structures)
     return selected_structures
                                                                              
 def structures_to_vasp(structures, path_dataset, remove_x=True):
@@ -49,7 +50,7 @@ def structures_to_vasp(structures, path_dataset, remove_x=True):
         for row in structures:
             # make dataset directory (normally follows $MATERIAL/CE/dataset)
             path_row = path_dataset.joinpath('dataset/'+str(row.id))
-            path_row.mkdir(parent=True)
+            path_row.mkdir(parents=True)
             atoms = row.toatoms()
             del atoms[[atom.index for atom in atoms if atom.symbol == 'X']]
             ase.io.write('POSCAR', atoms, format='vasp')
