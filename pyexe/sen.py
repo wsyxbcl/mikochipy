@@ -71,12 +71,12 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
                  if os.path.isdir(os.path.join(dataset_dir, name))]
     print("Total task: {}".format(len(task_dirs)))
     logging.info("Total task: {}".format(len(task_dirs)))
-    # Remove fininshed tasks
-    task_finished = []
+    # Remove handled tasks
+    task_handled = []
     for task_dir in task_dirs:
-        if os.path.exists(task_dir.joinpath('OUTCAR')):
-            task_finished.append(task_dir)
-    for task_dir in task_finished:
+        if os.path.exists(task_dir.joinpath('OUTCAR')) or os.path.exists(task_dir.joinpath('sen-was-here')):
+            task_handled.append(task_dir)
+    for task_dir in task_handled:
         task_dirs.remove(task_dir)
     print("Task left: {}".format(len(task_dirs)))
     logging.info("Task left: {}".format(len(task_dirs)))
@@ -92,6 +92,7 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
             job.submit()
             print("Job submmited as {}, status: {}".format(job.jobid, job.get_stat()))
             logging.info("Job submmited as {}, status: {}".format(job.jobid, job.get_stat()))
+            open(task_dir.joinpath('sen-was-here'), 'a').close()
             task_dirs.remove(task_dir)
             print("Task removed.")
             if not task_dirs:
