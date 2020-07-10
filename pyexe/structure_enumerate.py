@@ -48,6 +48,12 @@ def structures_to_vasp(structures, path_dataset, remove_x=True):
 
     path_dataset: path for vasp calculation (pathlib.Path).
     remove_x: remove X element from structure where X represents vacancy
+
+    file structures:
+    - path_dataset
+        - entry1 (row1.id)
+        - entry2 (row2.id)
+        ..
     """
     if remove_x:
         for row in structures:
