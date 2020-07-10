@@ -60,7 +60,7 @@ def structures_to_vasp(structures, path_dataset, remove_x=True):
     else:
         for row in structures:
             path_row = path_dataset.joinpath('dataset/'+str(row.id))
-            path_row.mkdir(parent=True)
+            path_row.mkdir(parents=True)
             ase.io.write(path_row.joinpath('POSCAR'), row.toatoms(), format='vasp')
         
 
