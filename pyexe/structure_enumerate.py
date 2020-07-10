@@ -58,16 +58,22 @@ def structures_to_vasp(structures, path_dataset, remove_x=True):
     if remove_x:
         for row in structures:
             # make dataset directory (normally follows $MATERIAL/CE/dataset)
-            path_row = path_dataset.joinpath('dataset/'+str(row.id))
+            path_row = path_dataset.joinpath(str(row.id))
             path_row.mkdir(parents=True)
             atoms = row.toatoms()
             del atoms[[atom.index for atom in atoms if atom.symbol == 'X']]
-            ase.io.write(path_row.joinpath('POSCAR'), atoms, format='vasp')
+            ase.io.write(path_row.joinpath('POSCAR'),
+                         atoms,
+                         format='vasp',
+                         sort=True)
     else:
         for row in structures:
-            path_row = path_dataset.joinpath('dataset/'+str(row.id))
+            path_row = path_dataset.joinpath(str(row.id))
             path_row.mkdir(parents=True)
-            ase.io.write(path_row.joinpath('POSCAR'), row.toatoms(), format='vasp')
+            ase.io.write(path_row.joinpath('POSCAR'),
+                         row.toatoms(),
+                         format='vasp',
+                         sort=True)
         
 
 def vasp_to_database(database, path_dataset, property):
