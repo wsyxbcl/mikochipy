@@ -104,6 +104,7 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
                 logging.info("Tasks finished")
                 return 0
             else:
+                time.sleep(random.randint(1, 3))
                 continue
         else:
             print("zzzzzzz")
