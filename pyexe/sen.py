@@ -55,8 +55,7 @@ def get_bjobs_status():
     # JOBID, USER, STAT, QUEUE, FROM_HOST, EXEC_HOST, JOB_NAME, SUBMIT_TIME
 
     # dirty fix for multiple node calculation
-    bjobs_status = [bjob_stat.split() for bjob_stat in status if \ 
-                    len(bjob_stat.strip()) > 10]
+    bjobs_status = [bjob_stat.split() for bjob_stat in status if len(bjob_stat.strip()) > 10]
     return bjobs_status
 
 def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
