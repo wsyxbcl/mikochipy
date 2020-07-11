@@ -48,11 +48,15 @@ class Bjob():
 def get_bjobs_status():
     # Just a temporary implement
     # TODO form a dictionary or something
+    # NOTE that number of node is not correctly collected in current implementation
 
     # remove headline and empty string
     status = subprocess.check_output('bjobs').decode('utf-8').split('\n')[1:-1]
     # JOBID, USER, STAT, QUEUE, FROM_HOST, EXEC_HOST, JOB_NAME, SUBMIT_TIME
-    bjobs_status = [bjob_stat.split() for bjob_stat in status]
+
+    # dirty fix for multiple node calculation
+    bjobs_status = [bjob_stat.split() for bjob_stat in status if \ 
+                    len(bjob_stat.strip()) > 10]
     return bjobs_status
 
 def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
@@ -108,5 +112,4 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
 
 if __name__ == '__main__':
     dataset_dir = Path('')
-    num_node =  1 # number of node for each cal, A dirty fix #TODO
-    auto_vasp_ce(dataset_dir=dataset_dir, max_job=6*num_node, time_sleep=1000)
+    auto_vasp_ce(dataset_dir=dataset_dir, max_job=6, time_sleep=1000)
