@@ -108,4 +108,5 @@ def auto_vasp_ce(dataset_dir, max_job=6, time_sleep=1000):
 
 if __name__ == '__main__':
     dataset_dir = Path('')
-    auto_vasp_ce(dataset_dir=dataset_dir, max_job=6, time_sleep=1000)
+    num_node =  1 # number of node for each cal, A dirty fix #TODO
+    auto_vasp_ce(dataset_dir=dataset_dir, max_job=6*num_node, time_sleep=1000)
