@@ -27,13 +27,13 @@ def pressure_logger(file_path, output_hex):
                                        output_hex, 
                                        pressure))
 
-def main(time_interval, serial_port, task='pressure_logger'):
+def main(time_interval, serial_port, task_name='pressure_logger'):
     """
     Collect data from serial and write to csv file (in current directory).
     """
     print("LOGGER START")
-    log_path = Path("./"+task+".csv")
-    print("Time interval: {} s,  log file: {}, good luck.".format(time_interval,
+    log_path = Path("./"+task_name+".csv")
+    print("Sampling period: {} s,  log file: {}, good luck.".format(time_interval,
                                                                   str(log_path)))
     record_cmd = bytes.fromhex("010300500002C41A")
     # Common ports on both Linux & Win platforms
@@ -45,10 +45,8 @@ def main(time_interval, serial_port, task='pressure_logger'):
 
 
 if __name__ == '__main__':
-    ####################
-    task = "pressure"
-    time_interval = 10
-    serial_port = "COM3"
-    ####################
+    task_name = input("Task name: ")
+    time_interval = int(input("Sampling period (s): "))
+    serial_port = input("Serial port for sensor (e.g. COM3): ")
 
-    main(time_interval, serial_port, task)
+    main(time_interval, serial_port, task_name)
