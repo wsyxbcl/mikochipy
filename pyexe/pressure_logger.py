@@ -26,6 +26,7 @@ def pressure_logger(file_path, output_hex):
         fp.write("{}, {}, {}\n".format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
                                        output_hex, 
                                        pressure))
+    print("{}: {}".format(datetime.datetime.now(), pressure))    
 
 def main(time_interval, serial_port, task_name='pressure_logger'):
     """
@@ -39,8 +40,7 @@ def main(time_interval, serial_port, task_name='pressure_logger'):
     # Common ports on both Linux & Win platforms
     while True:
         output_hex = get_hex(port=serial_port, cmd=record_cmd)
-        pressure_logger(Path("./pressure.csv"), output_hex)
-        print("{}: {}".format(datetime.datetime.now(), pressure))
+        pressure_logger((log_path), output_hex)
         time.sleep(time_interval)
 
 
