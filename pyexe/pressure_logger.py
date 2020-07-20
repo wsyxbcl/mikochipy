@@ -25,6 +25,7 @@ def pressure_logger(file_path, output_hex):
         pressure = int(output_hex[7: 14], 16)
     except ValueError:
         print("Empty string, skipped")
+        return 1
     try:
         with open(file_path, 'a') as fp:
             fp.write("{}, {}, {}\n".format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
