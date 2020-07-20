@@ -22,10 +22,14 @@ def pressure_logger(file_path, output_hex):
     Convert hex output from SBT904 to decimal and append to target file
     """
     pressure = int(output_hex[7: 14], 16)
-    with open(file_path, 'a') as fp:
-        fp.write("{}, {}, {}\n".format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
-                                       output_hex, 
-                                       pressure))
+    try:
+        with open(file_path, 'a') as fp:
+            fp.write("{}, {}, {}\n".format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
+                                           output_hex, 
+                                           pressure))
+    except PermissionError:
+        print("Permission denied when writing to log file.")
+
     print("{}: {}".format(datetime.datetime.now(), pressure))    
 
 def main(time_interval, serial_port, task_name='pressure_logger'):
