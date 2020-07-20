@@ -21,7 +21,10 @@ def pressure_logger(file_path, output_hex):
     """
     Convert hex output from SBT904 to decimal and append to target file
     """
-    pressure = int(output_hex[7: 14], 16)
+    try:
+        pressure = int(output_hex[7: 14], 16)
+    except ValueError:
+        print("Empty string, skipped")
     try:
         with open(file_path, 'a') as fp:
             fp.write("{}, {}, {}\n".format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
