@@ -64,11 +64,11 @@ def plot_dos(dos, energy, label, color, lw=1, color_fill=None):
         if color_fill is not None:
             plt.fill_between(energy, 0, d, edgecolor=color, facecolor=color_fill)
 
-def main(path, dos_element_plot, dos_orbital_plot, dos_total_plot, xmin, xmax, ymin, ymax, outfile):
+def main(path, dos_element_plot, dos_orbital_plot, dos_total_plot, xmin, xmax, ymin, ymax, outfile, text):
     plt.close()
     # Colormaps
-    # colors = plt.get_cmap("tab10").colors
-    colors = ['blue', 'red', 'green', 'orange']
+    colors = plt.get_cmap("tab10").colors
+    # colors = ['blue', 'orange', 'green', 'red']
 
     # Pymatgen API
     # dos_complete.get_element_dos()[Element['Fe']].densities[Spin.up]
@@ -126,7 +126,8 @@ def main(path, dos_element_plot, dos_orbital_plot, dos_total_plot, xmin, xmax, y
     handles, labels = plt.gca().get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     plt.legend(by_label.values(), by_label.keys(), loc='upper right')
-    
+    if text is not None:
+        plt.text(0.9, 0.05, text, transform=plt.gca().transAxes)
     if outfile is not None:
         plt.savefig(outfile, dpi=300)
     else:
@@ -151,7 +152,8 @@ if __name__ == '__main__':
     parser.add_argument('--xmax', dest='xmax', type=float, help="higher boundary of x")
     parser.add_argument('--ymin', dest='ymin', type=float, help="lower boundary of y")
     parser.add_argument('--ymax', dest='ymax', type=float, help="higher boundary of y")
-    parser.add_argument('--output', dest='outfile', type=Path, help='output file')                      
+    parser.add_argument('--output', dest='outfile', type=Path, help='output file')
+    parser.add_argument('--text', dest='text', type=str, help='plt.text')                          
     args = parser.parse_args()
     main(args.data_path, args.dos_element_plot, args.dos_orbital_plot, 
-         args.dos_total_plot, args.xmin, args.xmax, args.ymin, args.ymax, args.outfile)
+         args.dos_total_plot, args.xmin, args.xmax, args.ymin, args.ymax, args.outfile, args.text)
