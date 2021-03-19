@@ -3,9 +3,9 @@ import math
 import numpy as np
 
 
-def matrix_seprator(matrix, col_ref, row_ref, slope):
+def matrix_separator(matrix, col_ref, row_ref, slope):
     """
-    Seperate given matrix by arbitrary line, which passes x0(col0, row0) with slope
+    Separate given matrix by arbitrary line, which passes x0(col0, row0) with slope
     """
     m = matrix.shape[0]
     n = matrix.shape[1]
@@ -29,6 +29,6 @@ if __name__ == '__main__':
     angle = math.pi / 3
     slope = math.tan(angle)
 
-    matrix_left, matrix_middle, matrix_right = matrix_seprator(matrix, x0[0], x0[1], slope)
+    matrix_left, matrix_middle, matrix_right = matrix_separator(matrix, x0[0], x0[1], slope)
     print(matrix_left)
     print(matrix_right)
