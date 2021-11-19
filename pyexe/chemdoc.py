@@ -5,8 +5,8 @@ from docx import Document
 from pyvalem.formula import Formula, FormulaParseError
 
 def main():
-    input_file_path = 'test.docx'
-    output_file_path = 'result.docx'
+    input_file_path = input('Input file (e.g. test.docx): ')
+    output_file_path = input('Output filename (e.g. result.docx): ')
 
     doc = Document(input_file_path)
 
